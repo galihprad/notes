@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import Data from "./Data";
 import Card from "./Card";
 import firebase from "../config/fbConfig";
 
@@ -13,31 +12,38 @@ const styleListCard = {
   flexWrap: "wrap"
 };
 
+const db = firebase.firestore().collection("notes1");
+
 const Input = () => {
   let titles = "";
   let contents = "";
   let addData = [];
-  let dbArray = [];
-  const [List, setList] = useState(dbArray);
+
+  const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refetch, setRefetch] = useState(true);
 
   useEffect(() => {
-    let dbArray = List;
+    console.log("FETCH");
+    const ListDB = [];
     async function result() {
-      const getData = await firebase
-        .firestore()
-        .collection("notes1")
-        .get()
-        .then(snapsho => {
-          snapsho.docs.forEach(item => {
-            dbArray.push(item.data());
+      await db.get().then(snapshot => {
+        snapshot.docs.forEach(item => {
+          ListDB.push({
+            judul: item.data().judul,
+            isi: item.data().isi,
+            id: item.id
           });
         });
+      });
       setIsLoading(false);
-      setList(dbArray);
+      setList(ListDB);
+      console.log("lis", List);
     }
     result();
-  }, [List]);
+  }, [refetch]);
+
+  const RefetchData = () => setRefetch(!refetch);
 
   const handleChangeTitle = e => {
     titles = e.target.value;
@@ -49,15 +55,30 @@ const Input = () => {
   const handleSubmit = e => {
     e.preventDefault();
     addData = [{ judul: titles, isi: contents }];
-    console.log("DAT", addData, List);
     setList(addData.concat(List));
+    db.add({ judul: titles, isi: contents });
+    RefetchData();
   };
+
+  const handleDelete = e => {
+    db.doc(e.target.id).delete();
+    RefetchData();
+  };
+
+  console.log("lis", List);
 
   const ListCard = isLoading
     ? "tunggu dilit..."
     : List.map(item => (
-        <Card key={Math.random()} title={item.judul} content={item.isi} />
+        <>
+          <div onClick={handleDelete} id={item.id}>
+            X
+          </div>
+          <Card key={item.id} title={item.judul} content={item.isi} />
+        </>
       ));
+
+  console.log("RENDER");
 
   return (
     <div>
