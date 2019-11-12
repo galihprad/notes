@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import firebase from "../config/fbConfig";
-import EditCard from "./EditCard";
 
 const styleCard = {
   height: "100px",
@@ -20,17 +19,15 @@ const styleCardContent = {
 };
 
 const db = firebase.firestore().collection("notes1");
+let titles = "";
+let contents = "";
 
 const Card = props => {
-  const [refetch, setRefetch] = useState(true);
-  const { title, content, id, list, RefetchData } = props;
+  const { title, content, id, RefetchData } = props;
   const [titleVal, setTitleVal] = useState(title);
   const [contentVal, setContentVal] = useState(content);
   const [isEdit, setIsEdit] = useState(false);
-  const [listNew, setListNew] = useState(list);
-  let titles = "";
-  let contents = "";
-  let addData = [];
+
   const handleChangeTitle = e => {
     setTitleVal(e.target.value);
     titles = e.target.value;
@@ -41,24 +38,22 @@ const Card = props => {
   };
 
   const handleSubmit = e => {
-    // e.preventDefault();
-    // addData = [{ judul: titles, isi: contents }];
-    // setList(addData.concat(List));
-    // db.add({ judul: titles, isi: contents });
-    // RefetchData();
+    e.preventDefault();
+    db.doc(id).update({
+      judul: titles,
+      isi: contents
+    });
+    RefetchData();
+    setIsEdit(false);
   };
-  // const RefetchData = () => setRefetch(!refetch);
+
   const handleDelete = e => {
-    console.log(id);
     db.doc(id).delete();
     RefetchData();
   };
 
   const handleEdit = e => {
-    setIsEdit(!isEdit);
-    setListNew([]);
-    RefetchData();
-    console.log("EDIT", listNew, list);
+    setIsEdit(true);
   };
 
   const renderCard = () => {

@@ -12,16 +12,15 @@ const styleListCard = {
 };
 
 const db = firebase.firestore().collection("notes1");
+let titles = "";
+let contents = "";
 
 const Input = () => {
-  let titles = "";
-  let contents = "";
   let addData = [];
 
   const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     console.log("FETCH");
     const ListDB = [];
@@ -37,7 +36,6 @@ const Input = () => {
       });
       setIsLoading(false);
       setList(ListDB);
-      console.log("lis", List);
     }
     result();
   }, [refetch]);
@@ -59,32 +57,14 @@ const Input = () => {
     RefetchData();
   };
 
-  const handleDelete = e => {
-    db.doc(e.target.id).delete();
-    RefetchData();
-  };
-
-  const handleEdit = e => {
-    setIsEdit(!isEdit);
-  };
-
-  console.log("lis", List);
-
   const ListCard = isLoading
     ? "tunggu dilit..."
     : List.map(item => (
         <>
-          {/* <button onClick={handleDelete} id={item.id}>
-            X
-          </button>
-          <button onClick={handleEdit} id={item.id}>
-            E
-          </button> */}
           <Card
             RefetchData={RefetchData}
-            list={List}
+            id={item.id}
             key={item.id}
-            isEdit={isEdit}
             title={item.judul}
             content={item.isi}
           />
