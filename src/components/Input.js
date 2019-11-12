@@ -21,6 +21,7 @@ const Input = () => {
   const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(true);
+
   useEffect(() => {
     console.log("FETCH");
     const ListDB = [];
@@ -57,6 +58,7 @@ const Input = () => {
     RefetchData();
   };
 
+
   const ListCard = isLoading
     ? "tunggu dilit..."
     : List.map(item => (
@@ -65,6 +67,7 @@ const Input = () => {
             RefetchData={RefetchData}
             id={item.id}
             key={item.id}
+
             title={item.judul}
             content={item.isi}
           />

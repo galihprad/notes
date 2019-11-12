@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import firebase from "../config/fbConfig";
 
+
 const styleCard = {
   height: "100px",
   width: "100px",
@@ -28,6 +29,7 @@ const Card = props => {
   const [contentVal, setContentVal] = useState(content);
   const [isEdit, setIsEdit] = useState(false);
 
+
   const handleChangeTitle = e => {
     setTitleVal(e.target.value);
     titles = e.target.value;
@@ -53,6 +55,7 @@ const Card = props => {
   };
 
   const handleEdit = e => {
+
     setIsEdit(true);
   };
 
