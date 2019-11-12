@@ -7,7 +7,6 @@ const styleInput = {
   justifyContent: "center"
 };
 const styleListCard = {
-  display: "flex",
   justifyContent: "center",
   flexWrap: "wrap"
 };
@@ -22,7 +21,7 @@ const Input = () => {
   const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(true);
-
+  const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     console.log("FETCH");
     const ListDB = [];
@@ -65,16 +64,30 @@ const Input = () => {
     RefetchData();
   };
 
+  const handleEdit = e => {
+    setIsEdit(!isEdit);
+  };
+
   console.log("lis", List);
 
   const ListCard = isLoading
     ? "tunggu dilit..."
     : List.map(item => (
         <>
-          <div onClick={handleDelete} id={item.id}>
+          {/* <button onClick={handleDelete} id={item.id}>
             X
-          </div>
-          <Card key={item.id} title={item.judul} content={item.isi} />
+          </button>
+          <button onClick={handleEdit} id={item.id}>
+            E
+          </button> */}
+          <Card
+            RefetchData={RefetchData}
+            list={List}
+            key={item.id}
+            isEdit={isEdit}
+            title={item.judul}
+            content={item.isi}
+          />
         </>
       ));
 
