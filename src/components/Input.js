@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import firebase from "../config/fbConfig";
+const uuidv4 = require("uuid/v4");
 
 const styleInput = {
   display: "flex",
@@ -16,7 +17,6 @@ let titles = "";
 let contents = "";
 
 const Input = () => {
-  let addData = [];
 
   const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,12 +29,13 @@ const Input = () => {
       await db.get().then(snapshot => {
         snapshot.docs.forEach(item => {
           ListDB.push({
-            judul: item.data().judul,
-            isi: item.data().isi,
+            title: item.data().title,
+            content: item.data().content,
             id: item.id
           });
         });
       });
+      console.log("listdb", ListDB);
       setIsLoading(false);
       setList(ListDB);
     }
@@ -46,16 +47,25 @@ const Input = () => {
   const handleChangeTitle = e => {
     titles = e.target.value;
   };
+
   const handleChangeContent = e => {
     contents = e.target.value;
   };
 
-  const handleSubmit = e => {
+  const handleAddData = e => {
     e.preventDefault();
-    addData = [{ judul: titles, isi: contents }];
+    const ids = uuidv4();
+    let addData = [{ id: ids, title: titles, content: contents }];
     setList(addData.concat(List));
-    db.add({ judul: titles, isi: contents });
-    RefetchData();
+    db.doc(ids).set({ title: titles, content: contents });
+  };
+
+
+  const handleDelete = id => {
+    console.log("delete");
+    let newList = List.filter(item => item.id !== id);
+    setList(newList);
+    db.doc(id).delete();
   };
 
 
@@ -64,28 +74,28 @@ const Input = () => {
     : List.map(item => (
         <>
           <Card
+            db={db}
+            handleDelete={handleDelete}
             RefetchData={RefetchData}
             id={item.id}
             key={item.id}
-
-            title={item.judul}
-            content={item.isi}
+            title={item.title}
+            content={item.content}
           />
         </>
       ));
 
-  console.log("RENDER");
+  console.log("RENDER", List);
 
   return (
     <div>
       <div style={styleInput}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleAddData}>
           <input placeholder="judul" onChange={handleChangeTitle} />
           <input placeholder="isi" onChange={handleChangeContent} />
           <button>Add</button>
         </form>
       </div>
-
       <div style={styleListCard}>{ListCard}</div>
     </div>
   );
