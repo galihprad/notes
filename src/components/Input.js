@@ -17,6 +17,7 @@ let titles = "";
 let contents = "";
 
 const Input = () => {
+
   const [List, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(true);
@@ -59,12 +60,14 @@ const Input = () => {
     db.doc(ids).set({ title: titles, content: contents });
   };
 
+
   const handleDelete = id => {
     console.log("delete");
     let newList = List.filter(item => item.id !== id);
     setList(newList);
     db.doc(id).delete();
   };
+
 
   const ListCard = isLoading
     ? "tunggu dilit..."

@@ -17,11 +17,17 @@ const styleCardContent = {
   fontSize: "12px"
 };
 
+const db = firebase.firestore().collection("notes1");
+let titles = "";
+let contents = "";
+
 const Card = props => {
+
   const { title, content, id, handleDelete, db } = props;
   const [titleVal, setTitleVal] = useState(title);
   const [contentVal, setContentVal] = useState(content);
   const [isEdit, setIsEdit] = useState(false);
+
 
   const handleUpdate = e => {
     e.preventDefault();
