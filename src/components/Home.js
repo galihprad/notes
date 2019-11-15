@@ -1,15 +1,12 @@
-import React from 'react'
-import Input from './Input'
+import React from "react";
+import View from "./View";
 
-
-
-const Home=()=> {
-   
-    return (
-        <div>
-        <Input/>
-        </div>
-    )
-}
+const Home = () => {
+  return (
+    <div>
+      <View />
+    </div>
+  );
+};
 
 export default Home;

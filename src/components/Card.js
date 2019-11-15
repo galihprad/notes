@@ -17,25 +17,35 @@ const styleCardContent = {
   fontSize: "12px"
 };
 
-const db = firebase.firestore().collection("notes1");
-let titles = "";
-let contents = "";
-
 const Card = props => {
-
-  const { title, content, id, handleDelete, db } = props;
+  const { title, content, id, setList, List, db } = props;
   const [titleVal, setTitleVal] = useState(title);
   const [contentVal, setContentVal] = useState(content);
   const [isEdit, setIsEdit] = useState(false);
 
-
   const handleUpdate = e => {
     e.preventDefault();
+
+    // update locally
+    let editedList = List.find(item => item.id === id);
+    editedList.title = titleVal;
+    editedList.content = contentVal;
+    setIsEdit(false);
+
+    // update on DB
     db.doc(id).update({
       title: titleVal,
       content: contentVal
     });
-    setIsEdit(false);
+  };
+
+  const handleDelete = id => {
+    // delete locally
+    let newList = List.filter(item => item.id !== id);
+    setList(newList);
+
+    // delete on DB
+    db.doc(id).delete();
   };
 
   const renderCard = () => {
@@ -62,7 +72,7 @@ const Card = props => {
       </div>
     );
   };
-
+  console.log("RENDER-CARD");
   return (
     <div>
       <button onClick={() => handleDelete(id)}>X</button>
