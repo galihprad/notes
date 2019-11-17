@@ -25,6 +25,7 @@ const styleListCard = css`
   flex-wrap: wrap;
 `;
 
+
 const db = firebase.firestore().collection("notes1");
 
 const View = () => {

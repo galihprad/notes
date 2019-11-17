@@ -14,6 +14,7 @@ const styleHome = css`
 const Home = () => {
   return (
     <div css={styleHome}>
+
       <View />
     </div>
   );
