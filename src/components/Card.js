@@ -1,21 +1,53 @@
 import React, { useState } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 
-const styleCard = {
-  height: "100px",
-  width: "100px",
-  backgroundColor: "yellow",
-  margin: "50px",
-  padding: "10px"
-};
+const styleCardContainer = css`
+  width: 26%;
+  background-color: yellow;
+  padding: 10px;
+  margin: 50px 20px 0 20px;
+  :hover {
+    #button-card {
+      display: flex;
+      margin-bottom: 10px;
+    }
+  }
+`;
 
-const styleCardTitle = {
-  margin: "0 0 10px 0",
-  fontSize: "14px"
-};
+const styleCardTitle = css`
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 500;
+`;
 
-const styleCardContent = {
-  fontSize: "12px"
-};
+const styleCardContent = css`
+  font-size: 12px;
+`;
+
+const styleCard = css`
+  display: block;
+`;
+const styleButtonCard = css`
+  height: 20px;
+  justify-content: flex-end;
+  display: none;
+  margin-top: -30px;
+`;
+const styleButtonDelete = css`
+  margin-top: 0px;
+`;
+
+const styleButtonEdit = css`
+  margin-top: 0px;
+`;
+
+const styleInputTitle = css`
+  width: 100%;
+`;
+const styleInputContent = css`
+  width: 100%;
+`;
 
 const Card = props => {
   const { title, content, id, setList, List, db } = props;
@@ -50,14 +82,16 @@ const Card = props => {
 
   const renderCard = () => {
     return isEdit ? (
-      <div style={styleCard}>
+      <div css={styleCard}>
         <form onSubmit={handleUpdate}>
           <input
+            css={styleInputTitle}
             placeholder="judul"
             onChange={e => setTitleVal(e.target.value)}
             value={titleVal}
           />
-          <input
+          <textarea
+            css={styleInputContent}
             placeholder="isi"
             onChange={e => setContentVal(e.target.value)}
             value={contentVal}
@@ -66,17 +100,23 @@ const Card = props => {
         </form>
       </div>
     ) : (
-      <div style={styleCard}>
-        <div style={styleCardTitle}>{titleVal}</div>
-        <div style={styleCardContent}>{contentVal}</div>
+      <div css={styleCard}>
+        <div css={styleCardTitle}>{titleVal}</div>
+        <div css={styleCardContent}>{contentVal}</div>
       </div>
     );
   };
   console.log("RENDER-CARD");
   return (
-    <div>
-      <button onClick={() => handleDelete(id)}>X</button>
-      <button onClick={() => setIsEdit(true)}>E</button>
+    <div css={styleCardContainer}>
+      <div css={styleButtonCard} id="button-card">
+        <button css={styleButtonEdit} onClick={() => setIsEdit(true)}>
+          Edit
+        </button>
+        <button css={styleButtonDelete} onClick={() => handleDelete(id)}>
+          X
+        </button>
+      </div>
       {renderCard()}
     </div>
   );
