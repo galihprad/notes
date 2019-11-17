@@ -2,15 +2,29 @@ import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import Input from "./Input";
 import firebase from "../config/fbConfig";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 
-const styleInput = {
-  display: "flex",
-  justifyContent: "center"
-};
-const styleListCard = {
-  justifyContent: "center",
-  flexWrap: "wrap"
-};
+const styleView = css`
+  width: 75%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const styleInput = css`
+  margin-top: 100px;
+`;
+
+const styleListCard = css`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #f5f5f5;
+  flex-wrap: wrap;
+`;
+
 
 const db = firebase.firestore().collection("notes1");
 
@@ -58,11 +72,11 @@ const View = () => {
   console.log("RENDER", List);
 
   return (
-    <div>
-      <div style={styleInput}>
+    <div css={styleView}>
+      <div css={styleInput}>
         <Input List={List} db={db} setList={setList} />
       </div>
-      <div style={styleListCard}>{ListCard}</div>
+      <div css={styleListCard}>{ListCard}</div>
     </div>
   );
 };
